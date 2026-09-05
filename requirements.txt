@@ -27,6 +27,7 @@ pytest-html==4.2.0
 pytest-metadata==3.1.1
 pytest-xdist==3.8.0
 python-multipart==0.0.32
+PyYAML==6.0.3
 referencing==0.37.0
 requests==2.34.2
 rpds-py==2026.6.3

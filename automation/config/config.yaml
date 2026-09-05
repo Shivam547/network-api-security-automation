@@ -1,0 +1,20 @@
+base_url: "http://127.0.0.1:8000"
+
+timeout: 10
+
+users:
+  admin:
+    username: "admin"
+    password: "admin123"
+
+  manager:
+    username: "manager"
+    password: "manager123"
+
+  user:
+    username: "user1"
+    password: "user123"
+
+  readonly:
+    username: "readonly"
+    password: "readonly123"
