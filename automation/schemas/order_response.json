@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OrderResponse",
+  "type": "object",
+  "required": [
+    "id",
+    "customer_name",
+    "status",
+    "version",
+    "locked_by",
+    "lock_expires_at"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "customer_name": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "version": {
+      "type": "integer"
+    },
+    "locked_by": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "lock_expires_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": false
+}
