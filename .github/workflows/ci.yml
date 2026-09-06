@@ -10,12 +10,6 @@ on:
       - main
       - master
 
-# ─── ADDED: Required permissions block for GitHub Pages ───
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -84,17 +78,6 @@ jobs:
           name: pytest-junit-report
           path: reports/junit-results.xml
 
-      # ─── ADDED: Compresses the reports directory for GitHub Pages ───
-      - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: reports/
-
-      # ─── MODIFIED: Deploy the artifact uploaded in the step above ───
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
-
-      # ─── MODIFIED: Added if: always() to ensure logs print if steps before failure execute ───
       - name: Show container logs
         if: failure()
         run: docker logs network-api-security-api
