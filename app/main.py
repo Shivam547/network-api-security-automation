@@ -7,6 +7,7 @@ from app.routers import auth
 from app.routers import users
 from app.routers import orders
 from app.routers import rate_limit
+from app.seed import seed_users
 
 
 app = FastAPI(
@@ -16,6 +17,7 @@ app = FastAPI(
 
 
 Base.metadata.create_all(bind=engine)
+seed_users()
 
 
 app.include_router(auth.router)
