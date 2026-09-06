@@ -1,0 +1,83 @@
+name: API Security Automation CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build Docker image
+        run: |
+          docker build -t network-api-security .
+
+      - name: Start API container
+        run: |
+          docker run -d \
+            --name network-api-security-api \
+            -p 8000:8000 \
+            network-api-security
+
+      - name: Wait for API
+        run: |
+          for i in {1..30}; do
+            if curl -sf http://127.0.0.1:8000/health; then
+              echo "API is ready"
+              exit 0
+            fi
+            echo "Waiting for API..."
+            sleep 2
+          done
+
+          echo "API failed to start"
+          docker logs network-api-security-api
+          exit 1
+
+      - name: Create reports directory
+        run: mkdir -p reports
+
+      - name: Run Pytest
+        run: |
+          pytest \
+            --html=reports/test-report.html \
+            --self-contained-html \
+            --junitxml=reports/junit-results.xml
+
+      - name: Upload HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-html-report
+          path: reports/test-report.html
+
+      - name: Upload JUnit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-junit-report
+          path: reports/junit-results.xml
+
+      - name: Show container logs
+        if: failure()
+        run: docker logs network-api-security-api
