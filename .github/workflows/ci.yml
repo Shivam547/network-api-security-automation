@@ -10,6 +10,7 @@ on:
       - main
       - master
 
+# ─── ADDED: Required permissions block for GitHub Pages ───
 permissions:
   contents: read
   pages: write
@@ -93,9 +94,7 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
 
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
-
+      # ─── MODIFIED: Added if: always() to ensure logs print if steps before failure execute ───
       - name: Show container logs
         if: failure()
         run: docker logs network-api-security-api
