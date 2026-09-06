@@ -78,6 +78,9 @@ jobs:
           name: pytest-junit-report
           path: reports/junit-results.xml
 
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+
       - name: Show container logs
         if: failure()
         run: docker logs network-api-security-api
