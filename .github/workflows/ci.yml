@@ -10,6 +10,9 @@ on:
       - main
       - master
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -78,6 +81,36 @@ jobs:
           name: pytest-junit-report
           path: reports/junit-results.xml
 
+      - name: Prepare report for GitHub Pages
+        if: always()
+        run: |
+          mkdir -p public
+          cp reports/test-report.html public/index.html
+
+      - name: Upload Pages artifact
+        if: always()
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
       - name: Show container logs
         if: failure()
         run: docker logs network-api-security-api
+
+  deploy-report:
+    if: always()
+    needs: test
+    runs-on: ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy test report to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
