@@ -1,5 +1,5 @@
 from app.database import SessionLocal, engine, Base
-from app.models import User
+from app.models import User, Order
 
 
 Base.metadata.create_all(bind=engine)
@@ -50,6 +50,25 @@ def seed_users():
 
         if not existing_user:
             db.add(user)
+
+    existing_order = (
+        db.query(Order)
+        .filter(Order.id == 1)
+        .first()
+    )
+
+    if not existing_order:
+
+        order = Order(
+            id=1,
+            customer_name="Test Customer",
+            status="PENDING",
+        )
+
+        db.add(order)
+
+    db.commit()
+    db.close()
 
     db.commit()
     db.close()

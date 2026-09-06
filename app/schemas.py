@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel, EmailStr, ConfigDict
 
 
@@ -26,3 +28,22 @@ class LoginRequest(BaseModel):
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str
+
+class OrderCreate(BaseModel):
+    customer_name: str
+
+
+class OrderUpdate(BaseModel):
+    status: str
+    version: int
+
+
+class OrderResponse(BaseModel):
+    id: int
+    customer_name: str
+    status: str
+    version: int
+    locked_by: str | None = None
+    lock_expires_at: datetime | None = None
+
+    model_config = ConfigDict(from_attributes=True)

@@ -5,6 +5,7 @@ from app import models
 
 from app.routers import auth
 from app.routers import users
+from app.routers import orders
 
 
 app = FastAPI(
@@ -18,6 +19,7 @@ Base.metadata.create_all(bind=engine)
 
 app.include_router(auth.router)
 app.include_router(users.router)
+app.include_router(orders.router)
 
 
 @app.get("/health")
